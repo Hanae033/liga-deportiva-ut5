@@ -10,6 +10,10 @@ WORKDIR /var/www
 
 COPY . .
 
+RUN mkdir -p bootstrap/cache storage/logs storage/framework/cache \
+    storage/framework/sessions storage/framework/views \
+    && chmod -R 775 bootstrap/cache storage
+
 RUN composer install --no-dev --optimize-autoloader
 
 RUN echo "APP_ENV=production" > .env && \
