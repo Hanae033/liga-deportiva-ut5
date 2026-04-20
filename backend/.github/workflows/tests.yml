@@ -1,0 +1,36 @@
+name: CI - Tests Laravel Liga Deportiva
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  laravel-tests:
+    name: Laravel — Unit + Feature Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP 8.4
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, pdo_sqlite, sqlite3
+
+      - name: Instalar dependencias Composer
+        run: composer install --prefer-dist --no-progress
+
+      - name: Copiar .env.testing
+        run: cp .env.testing .env
+
+      - name: Generar clave
+        run: php artisan key:generate
+
+      - name: Ejecutar migraciones
+        run: php artisan migrate --force
+      - name: Ejecutar PHPUnit
+        run: php artisan test

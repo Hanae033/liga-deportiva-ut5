@@ -1,0 +1,21 @@
+# Node modules
+node_modules/
+liga-deportiva-backend/node_modules/
+npm-debug.log
+
+# Environment variables
+.env
+liga-deportiva-backend/.env
+*.env.local
+
+# Angular
+/dist
+/.angular
+.angular/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db

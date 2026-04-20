@@ -1,0 +1,16 @@
+<h2 class="mb-3">Equipos</h2>
+
+<div class="row g-3">
+  <div class="col-md-4" *ngFor="let e of equipos">
+    <div class="card h-100 shadow-sm">
+      <div class="card-body">
+        <h5>{{e.nombre}}</h5>
+        <p class="mb-1">{{e.deporte}}</p>
+        <small class="text-muted">Capitán: {{e.capitan}}</small>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

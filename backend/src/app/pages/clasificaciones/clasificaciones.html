@@ -1,0 +1,17 @@
+<h2 class="mb-3">Clasificaciones</h2>
+
+<table class="table table-hover table-dark">
+  <thead>
+    <tr>
+      <th>Pos</th><th>Equipo</th><th>Puntos</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let c of clasificacion; index as i">
+      <td>{{ i + 1 }}</td>
+      <td>{{ c.equipo }}</td>
+      <td>{{ c.puntos }}</td>
+    </tr>
+  </tbody>
+</table>
+
