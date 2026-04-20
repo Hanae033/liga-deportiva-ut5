@@ -1,4 +1,14 @@
-laravel-tests:
+name: CI/CD - Liga Deportiva UT5
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+
+  laravel-tests:
     name: Tests Laravel
     runs-on: ubuntu-latest
     steps:
@@ -35,3 +45,44 @@ laravel-tests:
       - name: Ejecutar tests
         working-directory: backend
         run: php artisan test
+
+  angular-tests:
+    name: Tests Angular
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar dependencias
+        working-directory: frontend
+        run: npm ci
+
+      - name: Ejecutar tests
+        working-directory: frontend
+        run: npx ng test --watch=false --browsers=ChromeHeadless
+
+  deploy:
+    name: Despliegue en Render
+    runs-on: ubuntu-latest
+    needs: [laravel-tests, angular-tests]
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Desplegar backend
+        run: |
+          curl -s -X POST \
+            -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+            https://api.render.com/v1/services/${{ secrets.RENDER_BACKEND_SERVICE_ID }}/deploys \
+            -H "Content-Type: application/json" \
+            -d '{}'
+
+      - name: Desplegar frontend
+        run: |
+          curl -s -X POST \
+            -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+            https://api.render.com/v1/services/${{ secrets.RENDER_FRONTEND_SERVICE_ID }}/deploys \
+            -H "Content-Type: application/json" \
+            -d '{}'
